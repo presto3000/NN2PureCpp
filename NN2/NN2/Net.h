@@ -9,39 +9,18 @@
 
 using namespace std;
 
-//Forward declaration:
-class Neuron {};
-
-typedef vector<Neuron> Layer;
-
 struct Connection
 {
 	double weight;
 	double deltaWeight;
 };
 
-// **************************** class Net **************************
-class Net
-{
-public:
-	Net(const vector<unsigned> &topology);
-	// func const and by ref of vector
-	void feedForward(const vector<double> &inputVals);
 
-	void backProp(const vector<double> &targetVals);
+class Neuron;
 
-	void getResults(vector<double> &resultVals) const;
+typedef vector<Neuron> Layer;
 
-	double getRecentAverageError(void) const { return m_recentAverageError; }
-
-private:
-	// Layer - Vector of Neurons
-	vector<Layer> m_layers; // m_layers[layerNum][neuronNum]
-	double m_error;
-	double m_recentAverageError;
-	double m_recentAverageSmoothingFactor;
-};
-// **************************** class Neuron **************************
+// ****************** class Neuron ******************
 class Neuron
 {
 public:
@@ -54,19 +33,21 @@ public:
 	void updateInputWeights(Layer &prevLayer);
 
 private:
-	static double eta;  // [0.0 .. 1.0] overall net training rate
+	static double eta;   // [0.0..1.0] overall net training rate
 	static double alpha; // [0.0..n] multiplier of last weight change (momentum)
 	static double transferFunction(double x);
 	static double transferFunctionDerivative(double x);
-	// rand 0 or 1
 	static double randomWeight(void) { return rand() / double(RAND_MAX); }
-	double sumDOW(const Layer &nextLayer);
+	double sumDOW(const Layer &nextLayer) const;
 	double m_outputVal;
 	vector<Connection> m_outputWeights;
 	unsigned m_myIndex;
 	double m_gradient;
 };
-//=====================================================================
+
+double Neuron::eta = 0.15;    // overall net learning rate, [0.0..1.0]
+double Neuron::alpha = 0.5;   // momentum, multiplier of last deltaWeight, [0.0..1.0]
+
 class TrainingData
 {
 public:
@@ -82,30 +63,22 @@ private:
 	ifstream m_trainingDataFile;
 };
 
-
-
-void TrainingData::getTopology(vector<unsigned> &topology)
+// ****************** class Net ******************
+class Net
 {
-	string line;
-	string label;
+public:
+	Net(const vector<unsigned> &topology);
+	void feedForward(const vector<double> &inputVals);
+	void backProp(const vector<double> &targetVals);
+	void getResults(vector<double> &resultVals) const;
+	double getRecentAverageError(void) const { return m_recentAverageError; }
 
-	getline(m_trainingDataFile, line);
-	stringstream ss(line);
-	ss >> label;
-	if (this->isEof() || label.compare("topology:") != 0) {
-		abort();
-	}
-
-	while (!ss.eof()) {
-		unsigned n;
-		ss >> n;
-		topology.push_back(n);
-	}
-
-	return;
-}
-double Neuron::eta = 0.15; // overall net learning rate
-double Neuron::alpha = 0.5; // momentum, multiplier of last deltaWeight
+private:
+	vector<Layer> m_layers; // m_layers[layerNum][neuronNum]
+	double m_error;
+	double m_recentAverageError;
+	static double m_recentAverageSmoothingFactor;
+};
 
 void showVectorVals(string label, vector<double> &v)
 {
@@ -117,32 +90,9 @@ void showVectorVals(string label, vector<double> &v)
 	cout << endl;
 }
 
+
 int main()
 {
-	//// e.g ... {3, 2, 1 }
-	//// creating
-	//vector<unsigned> topology;
-	//// Adding 3 layers: 3 inputs; 2 hidden 1 output
-	//topology.push_back(3);
-	//topology.push_back(2);
-	//topology.push_back(1);
-	//
-	//Net myNet(topology);
-	//
-	//// Like Variable linked array
-	//vector<double> inputVals;
-	//// feeding inputs
-	//myNet.feedForward(inputVals);
-	//
-	//
-	//vector<double> targetVals;
-	//// backpropagation (training / learning)
-	//myNet.backProp(targetVals);
-	//
-	//
-	//vector<double> resultVals;
-	//// results outputs
-	//myNet.getResults(resultVals);
 	TrainingData trainData("/tmp/trainingData.txt");
 
 	// e.g., { 3, 2, 1 }
@@ -154,8 +104,7 @@ int main()
 	vector<double> inputVals, targetVals, resultVals;
 	int trainingPass = 0;
 
-	while (!trainData.isEof()) 
-	{
+	while (!trainData.isEof()) {
 		++trainingPass;
 		cout << endl << "Pass " << trainingPass;
 
@@ -183,5 +132,4 @@ int main()
 	}
 
 	cout << endl << "Done" << endl;
-
 }

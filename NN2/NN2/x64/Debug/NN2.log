@@ -1,0 +1,7 @@
+﻿  Net.cpp
+d:\unrealpersonal\nn2purecppgit\nn2purecppgit\nn2\nn2\net.cpp(47): warning C4267: 'return': conversion from 'size_t' to 'unsigned int', possible loss of data
+d:\unrealpersonal\nn2purecppgit\nn2purecppgit\nn2\nn2\net.cpp(67): warning C4267: 'return': conversion from 'size_t' to 'unsigned int', possible loss of data
+d:\unrealpersonal\nn2purecppgit\nn2purecppgit\nn2\nn2\net.cpp(197): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
+d:\unrealpersonal\nn2purecppgit\nn2purecppgit\nn2\nn2\net.cpp(209): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
+d:\unrealpersonal\nn2purecppgit\nn2purecppgit\nn2\nn2\net.cpp(239): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
+  NN2.vcxproj -> D:\UNREALPERSONAL\NN2PureCppGIT\NN2PureCppGIT\NN2\x64\Debug\NN2.exe
