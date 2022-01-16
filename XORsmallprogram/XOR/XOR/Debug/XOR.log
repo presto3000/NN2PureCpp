@@ -1,0 +1,3 @@
+﻿  Source.cpp
+d:\unrealpersonal\nn2purecppgit\xorsmallprogram\xor\xor\source.cpp(19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  XOR.vcxproj -> D:\UNREALPERSONAL\NN2PureCppGIT\XORsmallprogram\XOR\Debug\XOR.exe
